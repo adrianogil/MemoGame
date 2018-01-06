@@ -26,9 +26,24 @@ public class ProceduralMemoItem : MonoBehaviour {
     public void Generate()
     {
         MeshBuilder meshBuilder = new MeshBuilder();
+        
         meshBuilder.AddQuad(Vector3.zero, 
             gridItemSize.x * leftDirection, 
-            gridItemSize.y * downDirection);
+            gridItemSize.y * downDirection, 
+            Facing.Front);
+        meshBuilder.UVs.Add(new Vector2(0f,0f));
+        meshBuilder.UVs.Add(new Vector2(0.5f,0f));
+        meshBuilder.UVs.Add(new Vector2(0f,0.5f));
+        meshBuilder.UVs.Add(new Vector2(0.5f,0.5f));
+
+        meshBuilder.AddQuad(Vector3.zero, 
+            gridItemSize.x * leftDirection, 
+            gridItemSize.y * downDirection,
+            Facing.Back);
+        meshBuilder.UVs.Add(new Vector2(0.5f,0.5f));
+        meshBuilder.UVs.Add(new Vector2(1f,0.5f));
+        meshBuilder.UVs.Add(new Vector2(0.5f,1f));
+        meshBuilder.UVs.Add(new Vector2(1f,1f));
 
 		Mesh mesh = meshBuilder.CreateMesh ();
 

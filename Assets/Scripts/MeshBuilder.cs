@@ -2,6 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum Facing
+{
+    Front,
+    Back,
+    Both   
+}
+
 public class MeshBuilder {
 
     private List<Vector3> m_Vertices = new List<Vector3>();
@@ -25,17 +32,26 @@ public class MeshBuilder {
         m_Indices.Add (index2);
     }
 
-    public void AddQuad(Vector3 pos, Vector3 v1, Vector3 v2)
+    public void AddQuad(Vector3 pos, Vector3 v1, Vector3 v2, Facing facing = Facing.Both)
     {
+        int t = m_Vertices.Count;
+
         m_Vertices.Add(pos);
         m_Vertices.Add(pos+v1);
         m_Vertices.Add(pos+v2);
         m_Vertices.Add(pos+v1+v2);
 
-        AddTriangle(0, 1, 2);
-        AddTriangle(2, 1, 3);
-        AddTriangle(0, 2, 1);
-        AddTriangle(2, 3, 1);
+        if (facing == Facing.Back || facing == Facing.Both)
+        {
+            AddTriangle(t+0, t+1, t+2);
+            AddTriangle(t+2, t+1, t+3);    
+        }
+        
+        if (facing == Facing.Front || facing == Facing.Both)
+        {
+            AddTriangle(t+0, t+2, t+1);
+            AddTriangle(t+2, t+3, t+1);
+        }
     }
 
     public Mesh CreateMesh()
