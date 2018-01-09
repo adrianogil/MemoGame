@@ -58,6 +58,7 @@ public class ProceduralMemoGrid : MonoBehaviour {
                 go = ProceduralMemoItem.Generate(gridItemInternalSize,left,(-1f)*up, itemMaterial);
                 
                 go.transform.position = gridItemPos;
+                go.name = go.name + "_" + x + "_" + y;
             }
         }
 
