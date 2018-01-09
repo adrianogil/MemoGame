@@ -8,12 +8,20 @@ using DG.Tweening;
 using UnityEditor;
 #endif
 
+public enum MemoFace
+{
+    Front,
+    Back
+}
+
 public class ProceduralMemoItem : MonoBehaviour {
 
 	public Material material;
     public Vector3 downDirection;
     public Vector3 leftDirection;
     public Vector2 gridItemSize;
+
+    public MemoFace facing = MemoFace.Back;
 
     private MeshCollider meshCollider;
 
@@ -34,7 +42,11 @@ public class ProceduralMemoItem : MonoBehaviour {
                 // focusPoint.x += (-0.5f) * gridItemSize.x;
                 // focusPoint.y += (-0.5f) * gridItemSize.y;
 //                transform.RotateAround(focusPoint, Vector3.up, 90);
-				transform.DORotate (Vector3.up*180f, 1f);
+				if (facing == MemoFace.Back)
+                    transform.DORotate (Vector3.up*180f, 1f);
+                else 
+                    transform.DORotate (Vector3.zero, 1f);
+                facing = facing == MemoFace.Back? MemoFace.Front : MemoFace.Back;
             }
             
         }

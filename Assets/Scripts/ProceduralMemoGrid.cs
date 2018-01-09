@@ -42,8 +42,8 @@ public class ProceduralMemoGrid : MonoBehaviour {
 
         Vector2 gridItemSize = new Vector2(width * (1f/gridSizeX),height * (1f/gridSizeY));
 
-        upperLeftPoint.x += gridItemSize.x;
-        // upperLeftPoint.y -= 0.25f * gridItemSize.y;
+        upperLeftPoint.x += 0.5f * gridItemSize.x;
+        upperLeftPoint.y -= 0.5f * gridItemSize.y;
 
         Vector2 gridItemInternalSize = Vector2.Scale(new Vector2(1f - paddingXPercent, 1f - paddingYPercent),
             gridItemSize);
