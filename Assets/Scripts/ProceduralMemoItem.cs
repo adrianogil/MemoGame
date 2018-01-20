@@ -14,12 +14,19 @@ public enum MemoFace
     Back
 }
 
+public interface IMemoItemActivate
+{
+    void Activate(ProceduralMemoItem memoItem, MemoFace facing);
+}
+
 public class ProceduralMemoItem : MonoBehaviour {
 
 	public Material material;
     public Vector3 downDirection;
     public Vector3 leftDirection;
     public Vector2 gridItemSize;
+
+    public static IMemoItemActivate itemActivate = null;
 
     public MemoFace facing = MemoFace.Back;
 
@@ -30,6 +37,23 @@ public class ProceduralMemoItem : MonoBehaviour {
 		
 	}
 	
+
+    public void SwapFacingDelayed(float time)
+    {
+        Invoke("SwapFacing", time);
+    }
+
+    public void SwapFacing()
+    {
+        transform.DOPause();
+        if (facing == MemoFace.Back)
+            transform.DORotate (Vector3.up*180f, 1f);
+        else 
+            transform.DORotate (Vector3.zero, 1f);
+        facing = facing == MemoFace.Back? MemoFace.Front : MemoFace.Back;
+    }
+
+
 	// Update is called once per frame
 	void Update () {
 	   	 if (Input.GetMouseButtonDown(0)) {
@@ -38,15 +62,13 @@ public class ProceduralMemoItem : MonoBehaviour {
             if (meshCollider.Raycast(ray, out hit, 100.0F))
             {
                 Debug.Log("GilLog - ProceduralMemoItem::Update - MeshCollider - " + gameObject.name);
-                // Vector3 focusPoint = transform.position;
-                // focusPoint.x += (-0.5f) * gridItemSize.x;
-                // focusPoint.y += (-0.5f) * gridItemSize.y;
-//                transform.RotateAround(focusPoint, Vector3.up, 90);
-				if (facing == MemoFace.Back)
-                    transform.DORotate (Vector3.up*180f, 1f);
-                else 
-                    transform.DORotate (Vector3.zero, 1f);
-                facing = facing == MemoFace.Back? MemoFace.Front : MemoFace.Back;
+                
+				SwapFacing();
+
+                if (itemActivate != null)
+                {
+                    itemActivate.Activate(this, facing);
+                }
             }
             
         }

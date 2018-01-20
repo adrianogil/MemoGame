@@ -30,7 +30,9 @@ public class ProceduralMemoGrid : MonoBehaviour {
         Vector3 gridPoint = Camera.main.transform.position + 
             cameraDistance * Camera.main.transform.forward;
 
-        float height = 2f * cameraDistance * Mathf.Tan(0.5f * Camera.main.fieldOfView * Mathf.Deg2Rad);
+        float scaledSize = 0.7f;
+
+        float height = scaledSize * 2f * cameraDistance * Mathf.Tan(0.5f * Camera.main.fieldOfView * Mathf.Deg2Rad);
         float width = height * (Screen.width * 1f/ Screen.height);
 
         Vector3 left = (-1f)*Camera.main.transform.right;
@@ -49,6 +51,8 @@ public class ProceduralMemoGrid : MonoBehaviour {
             gridItemSize);
 
         GameObject go;
+
+        ProceduralMemoItem.itemActivate = new MemoItemLogic();
 
         for (int x = 0; x < gridSizeX; x++)
         {
