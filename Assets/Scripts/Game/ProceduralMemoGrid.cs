@@ -75,10 +75,16 @@ public class ProceduralMemoGrid : MonoBehaviour {
             numbers[i] = i/2;   
         }
 
+        int temp = 0;
+        int tempIndex = 0;
+
         // Shuffle
         for (int i = 0; i < MemoItemLogic.MAX_ITEMS; i++)
         {
-            numbers[i] = numbers[Random.Range(0, MemoItemLogic.MAX_ITEMS)];
+            tempIndex = Random.Range(0, MemoItemLogic.MAX_ITEMS);
+            temp = numbers[tempIndex];
+            numbers[tempIndex] = numbers[i];
+            numbers[i] = temp;
         }
 
         int itemIndex = 0;
