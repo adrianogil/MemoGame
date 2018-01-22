@@ -19,12 +19,27 @@ public interface IMemoItemActivate
     void Activate(ProceduralMemoItem memoItem, MemoFace facing);
 }
 
+[System.Serializable]
+public class MemoItemData
+{
+    public Material material;
+    public Vector3 downDirection;
+    public Vector3 leftDirection;
+    public Vector2 gridItemSize;
+    public string itemName;
+    public int itemX;
+    public int itemY;
+    public int itemNumber;
+}
+
 public class ProceduralMemoItem : MonoBehaviour {
 
 	public Material material;
     public Vector3 downDirection;
     public Vector3 leftDirection;
     public Vector2 gridItemSize;
+
+    public MemoItemData itemData;
 
     public static IMemoItemActivate itemActivate = null;
 
@@ -76,17 +91,23 @@ public class ProceduralMemoItem : MonoBehaviour {
 
     public void Generate()
     {
+        if (itemData == null)
+        {
+            Debug.LogError("GilLog - ProceduralMemoItem::Generate - Null Data");
+            return;
+        }
+
         MeshBuilder meshBuilder = new MeshBuilder();
         
         Vector3 center = new Vector3(
-                (0.5f) * gridItemSize.x,
-                (0.5f) * gridItemSize.y,
+                (0.5f) * itemData.gridItemSize.x,
+                (0.5f) * itemData.gridItemSize.y,
                 0f
             );
 
         meshBuilder.AddQuad(center, 
-            gridItemSize.x * leftDirection, 
-            gridItemSize.y * downDirection, 
+            itemData.gridItemSize.x * itemData.leftDirection, 
+            itemData.gridItemSize.y * itemData.downDirection, 
             Facing.Front);
         meshBuilder.UVs.Add(new Vector2(0f,0f));
         meshBuilder.UVs.Add(new Vector2(0.5f,0f));
@@ -94,8 +115,8 @@ public class ProceduralMemoItem : MonoBehaviour {
         meshBuilder.UVs.Add(new Vector2(0.5f,0.5f));
 
         meshBuilder.AddQuad(center, 
-            gridItemSize.x * leftDirection, 
-            gridItemSize.y * downDirection,
+            itemData.gridItemSize.x * itemData.leftDirection, 
+            itemData.gridItemSize.y * itemData.downDirection,
             Facing.Back);
         meshBuilder.UVs.Add(new Vector2(0.5f,0.5f));
         meshBuilder.UVs.Add(new Vector2(1f,0.5f));
@@ -112,7 +133,9 @@ public class ProceduralMemoItem : MonoBehaviour {
 		MeshRenderer renderer = gameObject.GetComponent<MeshRenderer> ();
 		if (renderer == null)
 			renderer = gameObject.AddComponent<MeshRenderer> ();
-		renderer.material = material;
+		renderer.material = itemData.material;
+
+        SetupImage(renderer.material);
 
         meshCollider = gameObject.GetComponent<MeshCollider>();
         if (meshCollider == null)
@@ -120,6 +143,23 @@ public class ProceduralMemoItem : MonoBehaviour {
             meshCollider = gameObject.AddComponent<MeshCollider>();
         }
 	}
+
+    private void SetupImage(Material material)
+    {
+        material.mainTexture = ImageManager.Instance.images[itemData.itemNumber].texture;
+    }
+
+    public static GameObject Generate(MemoItemData itemData)
+    {
+        GameObject go = new GameObject("MemoItem");
+        ProceduralMemoItem memoItem = go.AddComponent<ProceduralMemoItem>();
+        memoItem.itemData = itemData;
+
+        memoItem.Generate();
+
+        return go;
+    }
+
 
     public static GameObject Generate(Vector2 gridItemSize, Vector3 left, Vector3 down, Material material)
     {

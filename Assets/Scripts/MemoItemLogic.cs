@@ -2,6 +2,8 @@ using System.Collections.Generic;
 
 public class MemoItemLogic : IMemoItemActivate
 {
+    public const int MAX_ITEMS = 9;
+
     private List<ProceduralMemoItem> frontFacingItems = null;
 
     public void Activate(ProceduralMemoItem memoItem, MemoFace facing)

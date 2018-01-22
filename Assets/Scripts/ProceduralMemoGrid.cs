@@ -15,9 +15,20 @@ public class ProceduralMemoGrid : MonoBehaviour {
     public int gridSizeX;
     public int gridSizeY;
 
+    public static ProceduralMemoGrid Instance
+    {
+        get;
+        private set;
+    }
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
 	// Use this for initialization
 	void Start () {
-		Generate();
+		// Generate();
 	}
 	
 	// Update is called once per frame
@@ -51,18 +62,53 @@ public class ProceduralMemoGrid : MonoBehaviour {
             gridItemSize);
 
         GameObject go;
+        MemoItemData itemData;
+
+        string itemName = "";
 
         ProceduralMemoItem.itemActivate = new MemoItemLogic();
+
+        int[] numbers = new int[MemoItemLogic.MAX_ITEMS];
+
+        for (int i = 0; i < MemoItemLogic.MAX_ITEMS; i++)
+        {
+            numbers[i] = i/2;   
+        }
+
+        // Shuffle
+        for (int i = 0; i < MemoItemLogic.MAX_ITEMS; i++)
+        {
+            numbers[i] = numbers[Random.Range(0, MemoItemLogic.MAX_ITEMS)];
+        }
+
+        int itemIndex = 0;
+
 
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
             {
                 Vector3 gridItemPos = upperLeftPoint - x * gridItemSize.x * left - y * gridItemSize.y * up;
-                go = ProceduralMemoItem.Generate(gridItemInternalSize,left,(-1f)*up, itemMaterial);
+                
+                itemName = "Item_" + x + "_" + y;
+
+                itemData = new MemoItemData()
+                {
+                    material = itemMaterial,
+                    downDirection = (-1f)*up,
+                    leftDirection = left,
+                    gridItemSize = gridItemInternalSize,
+                    itemName = itemName,
+                    itemX = x, itemY = y,
+                    itemNumber = numbers[itemIndex]
+                };
+
+                go = ProceduralMemoItem.Generate(itemData);
                 
                 go.transform.position = gridItemPos;
-                go.name = go.name + "_" + x + "_" + y;
+                go.name = go.name + "_" + itemName;
+
+                itemIndex++;
             }
         }
 

@@ -13,16 +13,36 @@ public class ImageData
 
 public class ImageManager : MonoBehaviour {
 
+    public static ImageManager Instance
+    {
+        get;
+        private set;
+    }
+
+    public const int MAX_ITEMS = 9;
+    private const string IMG_ALRDY_SAVED_KEY = "IMG_ALRDY_SAVED_KEY";
+
     public List<ImageData> images;
 
-	// Use this for initialization
-	void Start () {
-	
-        SaveImagesInto();
+    void Awake()
+    {
+        Instance = this;
 
-	}
+        if (PlayerPrefs.GetInt(IMG_ALRDY_SAVED_KEY, 0) == 0)
+        {
+            SaveDefaultImages();
+        }
+    }
+
+    public void ShuffleImages()
+    {
+        for (int i = 0; i < MAX_ITEMS && i < images.Count; i++)
+        {
+            images[i] = images[Random.Range(0, images.Count)];
+        }
+    }
 	
-	void SaveImagesInto () {
+	void SaveDefaultImages() {
 
         Debug.Log("GilLog - ImageManager::SaveImagesInto - "  + Application.persistentDataPath);
 
@@ -37,6 +57,10 @@ public class ImageManager : MonoBehaviour {
             imagePath = Application.persistentDataPath + "/images/" + images[i].name + ".png";
             File.WriteAllBytes(imagePath, imageBytes);
             Debug.Log("GilLog - ImageManager::SaveImagesInto - Saved image " + imagePath);
+
+            PlayerPrefs.SetString("MEMO_IMAGES_" + i, imagePath);
         }
+
+        PlayerPrefs.SetInt(IMG_ALRDY_SAVED_KEY, 1);
 	}
 }
