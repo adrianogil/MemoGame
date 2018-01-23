@@ -15,6 +15,10 @@ public class ProceduralMemoGrid : MonoBehaviour {
     public int gridSizeX;
     public int gridSizeY;
 
+    public bool alreadyGenerated = false;
+
+    public ProceduralMemoItem[,] gridItems;
+
     public static ProceduralMemoGrid Instance
     {
         get;
@@ -72,7 +76,7 @@ public class ProceduralMemoGrid : MonoBehaviour {
 
         for (int i = 0; i < MemoItemLogic.MAX_ITEMS; i++)
         {
-            numbers[i] = i/2;   
+            numbers[i] = Mathf.FloorToInt(i/2.0f);   
         }
 
         int temp = 0;
@@ -89,6 +93,7 @@ public class ProceduralMemoGrid : MonoBehaviour {
 
         int itemIndex = 0;
 
+        gridItems = new ProceduralMemoItem[gridSizeX, gridSizeY];
 
         for (int x = 0; x < gridSizeX; x++)
         {
@@ -111,12 +116,17 @@ public class ProceduralMemoGrid : MonoBehaviour {
 
                 go = ProceduralMemoItem.Generate(itemData);
                 
+                go.transform.parent = transform; // Nest for better organization
                 go.transform.position = gridItemPos;
                 go.name = go.name + "_" + itemName;
+
+                gridItems[x,y] = go.GetComponent<ProceduralMemoItem>();
 
                 itemIndex++;
             }
         }
+
+        alreadyGenerated = true;
 
         Debug.Log("GilLog - ProceduralMemoGrid::Generate - height " + height + "  - width " + width + " ");        
     }
@@ -125,6 +135,9 @@ public class ProceduralMemoGrid : MonoBehaviour {
 #if UNITY_EDITOR
 [CustomEditor(typeof(ProceduralMemoGrid))]
 public class ProceduralMemoGridEditor : Editor {
+
+    private const int maxInnerWidth = 250;
+    private const int maxInnerHeight = 80;
 
     public override void OnInspectorGUI()
     {
@@ -137,6 +150,30 @@ public class ProceduralMemoGridEditor : Editor {
         if (GUILayout.Button("Generate"))
         {
             editorObj.Generate();
+        }
+
+        if (editorObj.alreadyGenerated)
+        {
+            // Number of Cells
+            int cols = editorObj.gridSizeX, rows = editorObj.gridSizeY;
+
+            float gridItemWidth = maxInnerWidth / (1.0f * cols);
+
+            // GUI.Box(new Rect(5,5, 800, 800), "Colors");
+            // GUILayout.BeginArea(new Rect(10, 10, 700, 700));
+            GUILayout.BeginVertical();
+            for (int y = 0; y < rows; y++)
+            {
+                GUILayout.BeginHorizontal();
+                for (int x = 0; x < cols; x++)
+                {
+                    EditorGUILayout.LabelField("" + editorObj.gridItems[x,y].itemData.itemNumber,
+                                            GUILayout.Width(gridItemWidth));
+
+                }
+                GUILayout.EndHorizontal();
+            }
+            GUILayout.EndVertical();
         }
     }
 }

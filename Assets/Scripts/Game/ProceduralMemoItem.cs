@@ -118,10 +118,10 @@ public class ProceduralMemoItem : MonoBehaviour {
             itemData.gridItemSize.x * itemData.leftDirection, 
             itemData.gridItemSize.y * itemData.downDirection,
             Facing.Back);
-        meshBuilder.UVs.Add(new Vector2(0.5f,0.5f));
-        meshBuilder.UVs.Add(new Vector2(1f,0.5f));
         meshBuilder.UVs.Add(new Vector2(0.5f,1f));
         meshBuilder.UVs.Add(new Vector2(1f,1f));
+        meshBuilder.UVs.Add(new Vector2(0.5f,0.5f));
+        meshBuilder.UVs.Add(new Vector2(1f,0.5f));
 
 		Mesh mesh = meshBuilder.CreateMesh ();
 

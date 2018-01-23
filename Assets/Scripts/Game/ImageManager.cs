@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 [System.Serializable]
 public class ImageData
 {
@@ -42,7 +46,7 @@ public class ImageManager : MonoBehaviour {
         }
     }
 	
-	void SaveDefaultImages() {
+	public void SaveDefaultImages() {
 
         Debug.Log("GilLog - ImageManager::SaveImagesInto - "  + Application.persistentDataPath);
 
@@ -64,3 +68,24 @@ public class ImageManager : MonoBehaviour {
         PlayerPrefs.SetInt(IMG_ALRDY_SAVED_KEY, 1);
 	}
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(ImageManager))]
+public class ImageManagerEditor : Editor {
+
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+    
+        ImageManager editorObj = target as ImageManager;
+    
+        if (editorObj == null) return;
+
+        if (GUILayout.Button("Save Images in app folder"))
+        {
+            editorObj.SaveDefaultImages();
+        }
+    }
+
+}
+#endif
