@@ -38,6 +38,11 @@ public class ImageManager : MonoBehaviour {
         }
     }
 
+    void Start()
+    {
+        PickPhotosOnAndroidDevice();
+    }
+
     public void ShuffleImages()
     {
         for (int i = 0; i < MAX_ITEMS && i < images.Count; i++)
@@ -49,6 +54,11 @@ public class ImageManager : MonoBehaviour {
 	public void SaveDefaultImages() {
 
         Debug.Log("GilLog - ImageManager::SaveImagesInto - "  + Application.persistentDataPath);
+
+        if (!File.Exists(Application.persistentDataPath + "/images"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/images");
+        }
 
         byte[] imageBytes;
         string imagePath = "";
@@ -67,6 +77,25 @@ public class ImageManager : MonoBehaviour {
 
         PlayerPrefs.SetInt(IMG_ALRDY_SAVED_KEY, 1);
 	}
+
+    public void PickPhotosOnAndroidDevice()
+    {
+        Debug.Log("GilLog - ImageManager::PickPhotosOnAndroidDevice");
+        
+        AndroidJavaClass jc 
+            = new AndroidJavaClass (
+                "com.gillabs.memophysics.ImageManager"
+        );
+
+        jc.CallStatic ("pickPhotos", GetCurrentActivity());
+    }
+
+    public AndroidJavaObject GetCurrentActivity()
+    {
+        AndroidJavaClass jc 
+            = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
+        return jc.GetStatic<AndroidJavaObject> ("currentActivity");
+    }
 }
 
 #if UNITY_EDITOR
