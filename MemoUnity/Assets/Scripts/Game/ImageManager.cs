@@ -82,12 +82,9 @@ public class ImageManager : MonoBehaviour {
     {
         Debug.Log("GilLog - ImageManager::PickPhotosOnAndroidDevice");
         
-        AndroidJavaClass jc 
-            = new AndroidJavaClass (
-                "com.gillabs.memophysics.ImageManager"
-        );
+        AndroidJavaObject currentActivity = GetCurrentActivity();
 
-        jc.CallStatic ("pickPhotos", GetCurrentActivity());
+        currentActivity.Call("pickPhotos");
     }
 
     public AndroidJavaObject GetCurrentActivity()

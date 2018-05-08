@@ -45,11 +45,9 @@ repositories{
  }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    provided fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.+'
-
-    // compile(name:'imagepicker-debug', ext:'aar')
 
     // implementation 'com.github.esafirm.android-image-picker:imagepicker:x.y.z'
     // // for experimental rx picker

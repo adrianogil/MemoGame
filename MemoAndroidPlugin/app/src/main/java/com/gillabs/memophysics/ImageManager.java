@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.esafirm.imagepicker.features.ImagePicker;
+// import com.esafirm.imagepicker.features.ImagePicker;
 
 public class ImageManager  {
 
@@ -15,7 +15,7 @@ public class ImageManager  {
     {
         Log.d(TAG, "pickPhotos: ");
 
-        ImagePicker.create(activity)
+        // ImagePicker.create(activity)
             // .returnMode(ReturnMode.ALL) // set whether pick and / or camera action should return immediate result or not.
             // .folderMode(true) // folder mode (false by default)
             // .toolbarFolderTitle("Folder") // folder selection title
@@ -32,6 +32,6 @@ public class ImageManager  {
             // .theme(R.style.CustomImagePickerTheme) // must inherit ef_BaseTheme. please refer to sample
             // .enableLog(false) // disabling log
             // .imageLoader(new GrayscaleImageLoder()) // custom image loader, must be serializeable
-            .start(); // start image picker activity with request code
+            // .start(); // start image picker activity with request code
     }
 }

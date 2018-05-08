@@ -6,8 +6,13 @@
         android:allowBackup="true"
         android:supportsRtl="true">
         <activity
-            android:name="com.esafirm.imagepicker.features.ImagePickerActivity"
-            android:configChanges="orientation|screenSize"/>
+            android:name="com.gillabs.memophysics.UnityPlayerActivity"
+            android:configChanges="orientation|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
