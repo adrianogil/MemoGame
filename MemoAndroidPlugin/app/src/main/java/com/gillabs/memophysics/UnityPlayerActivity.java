@@ -42,8 +42,26 @@ public class UnityPlayerActivity extends Activity
         Log.d(TAG, "onActivityResult - " + requestCode);
 
         if (requestCode == PICK_IMAGE) {
-            //TODO: action
-            Log.d(TAG, "onActivityResult - result from PICK_IMAGE");
+            // Get action
+            Log.d(TAG, "onActivityResult - result from PICK_IMAGE - data - " + data.getData());
+            //TODO: Save image
+            InputStream inputStream = getContentResolver().openInputStream(data.getData());
+            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+            File directory = cw.getDir("memoimages", Context.MODE_PRIVATE);
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            File mypath = new File(directory, "image.jpg");
+
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(mypath);
+                resizedbitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.close();
+            } catch (Exception e) {
+                Log.e("SAVE_IMAGE", e.getMessage(), e);
+            }
+            inputStream.close();
         }
     }
 
