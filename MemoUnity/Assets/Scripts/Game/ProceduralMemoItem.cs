@@ -49,9 +49,9 @@ public class ProceduralMemoItem : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
 	}
-	
+
 
     public void SwapFacingDelayed(float time)
     {
@@ -63,7 +63,7 @@ public class ProceduralMemoItem : MonoBehaviour {
         transform.DOPause();
         if (facing == MemoFace.Back)
             transform.DORotate (Vector3.up*180f, 1f);
-        else 
+        else
             transform.DORotate (Vector3.zero, 1f);
         facing = facing == MemoFace.Back? MemoFace.Front : MemoFace.Back;
     }
@@ -74,10 +74,10 @@ public class ProceduralMemoItem : MonoBehaviour {
 	   	 if (Input.GetMouseButtonDown(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (meshCollider.Raycast(ray, out hit, 100.0F))
+            if (meshCollider.Raycast(ray, out hit, 100.0F) && facing == MemoFace.Back)
             {
                 Debug.Log("GilLog - ProceduralMemoItem::Update - MeshCollider - " + gameObject.name);
-                
+
 				SwapFacing();
 
                 if (itemActivate != null)
@@ -85,7 +85,7 @@ public class ProceduralMemoItem : MonoBehaviour {
                     itemActivate.Activate(this, facing);
                 }
             }
-            
+
         }
 	}
 
@@ -98,24 +98,24 @@ public class ProceduralMemoItem : MonoBehaviour {
         }
 
         MeshBuilder meshBuilder = new MeshBuilder();
-        
+
         Vector3 center = new Vector3(
                 (0.5f) * itemData.gridItemSize.x,
                 (0.5f) * itemData.gridItemSize.y,
                 0f
             );
 
-        meshBuilder.AddQuad(center, 
-            itemData.gridItemSize.x * itemData.leftDirection, 
-            itemData.gridItemSize.y * itemData.downDirection, 
+        meshBuilder.AddQuad(center,
+            itemData.gridItemSize.x * itemData.leftDirection,
+            itemData.gridItemSize.y * itemData.downDirection,
             Facing.Front);
         meshBuilder.UVs.Add(new Vector2(0f,0f));
         meshBuilder.UVs.Add(new Vector2(0.5f,0f));
         meshBuilder.UVs.Add(new Vector2(0f,0.5f));
         meshBuilder.UVs.Add(new Vector2(0.5f,0.5f));
 
-        meshBuilder.AddQuad(center, 
-            itemData.gridItemSize.x * itemData.leftDirection, 
+        meshBuilder.AddQuad(center,
+            itemData.gridItemSize.x * itemData.leftDirection,
             itemData.gridItemSize.y * itemData.downDirection,
             Facing.Back);
         meshBuilder.UVs.Add(new Vector2(0.5f,1f));
@@ -184,9 +184,9 @@ public class ProceduralMemoItemEditor : Editor {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-    
+
         ProceduralMemoItem editorObj = target as ProceduralMemoItem;
-    
+
         if (editorObj == null) return;
 
         if (GUILayout.Button("Generate")) {
