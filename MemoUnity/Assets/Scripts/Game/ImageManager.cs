@@ -44,9 +44,15 @@ public class ImageManager : MonoBehaviour {
 
     public void ShuffleImages()
     {
+        int nextRandomPos = -1;
+        ImageData tempSwap;
+
         for (int i = 0; i < MAX_ITEMS && i < images.Count; i++)
         {
-            images[i] = images[Random.Range(0, images.Count)];
+            nextRandomPos = Random.Range(0, images.Count);
+            tempSwap = images[i];
+            images[i] = images[nextRandomPos];
+            images[nextRandomPos] = tempSwap;
         }
     }
 
