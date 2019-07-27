@@ -13,6 +13,12 @@ public class MemoItemLogic : IMemoItemActivate
             frontFacingItems = new List<ProceduralMemoItem>();
         }
 
+        // Can't activate twice for same element in a row
+        if (frontFacingItems.Contains(memoItem))
+        {
+            return;
+        }
+
         if (facing == MemoFace.Front)
         {
             frontFacingItems.Add(memoItem);
@@ -20,11 +26,20 @@ public class MemoItemLogic : IMemoItemActivate
 
         if (frontFacingItems.Count >= 2)
         {
-            for (int i = frontFacingItems.Count-1; i >= 0; i--)
+            if (frontFacingItems[0].Matches(frontFacingItems[1]))
             {
-                frontFacingItems[i].SwapFacingDelayed(1f);
-                frontFacingItems.Remove(frontFacingItems[i]);
+                frontFacingItems.Remove(frontFacingItems[1]);
+                frontFacingItems.Remove(frontFacingItems[0]);
+            } else
+            {
+                for (int i = frontFacingItems.Count-1; i >= 0; i--)
+                {
+                    frontFacingItems[i].SwapFacingDelayed(1f);
+                    frontFacingItems.Remove(frontFacingItems[i]);
+                }
             }
+
+
         }
     }
 

@@ -52,7 +52,6 @@ public class ProceduralMemoItem : MonoBehaviour {
 
 	}
 
-
     public void SwapFacingDelayed(float time)
     {
         Invoke("SwapFacing", time);
@@ -68,6 +67,10 @@ public class ProceduralMemoItem : MonoBehaviour {
         facing = facing == MemoFace.Back? MemoFace.Front : MemoFace.Back;
     }
 
+    public bool Matches(ProceduralMemoItem item)
+    {
+        return itemData.itemNumber == item.itemData.itemNumber;
+    }
 
 	// Update is called once per frame
 	void Update () {

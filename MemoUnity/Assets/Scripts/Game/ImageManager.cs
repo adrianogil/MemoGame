@@ -14,7 +14,6 @@ public class ImageData
     public Texture2D texture;
 }
 
-
 public class ImageManager : MonoBehaviour {
 
     public static ImageManager Instance
@@ -50,7 +49,7 @@ public class ImageManager : MonoBehaviour {
             images[i] = images[Random.Range(0, images.Count)];
         }
     }
-	
+
 	public void SaveDefaultImages() {
 
         Debug.Log("GilLog - ImageManager::SaveImagesInto - "  + Application.persistentDataPath);
@@ -81,7 +80,7 @@ public class ImageManager : MonoBehaviour {
     public void PickPhotosOnAndroidDevice()
     {
         Debug.Log("GilLog - ImageManager::PickPhotosOnAndroidDevice");
-        
+
         AndroidJavaObject currentActivity = GetCurrentActivity();
 
         currentActivity.Call("pickPhotos");
@@ -89,7 +88,7 @@ public class ImageManager : MonoBehaviour {
 
     public AndroidJavaObject GetCurrentActivity()
     {
-        AndroidJavaClass jc 
+        AndroidJavaClass jc
             = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
         return jc.GetStatic<AndroidJavaObject> ("currentActivity");
     }
@@ -102,9 +101,9 @@ public class ImageManagerEditor : Editor {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-    
+
         ImageManager editorObj = target as ImageManager;
-    
+
         if (editorObj == null) return;
 
         if (GUILayout.Button("Save Images in app folder"))
