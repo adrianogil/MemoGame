@@ -16,6 +16,8 @@ public enum MemoFace
 
 public interface IMemoItemActivate
 {
+    bool IsGameEnded();
+
     void Activate(ProceduralMemoItem memoItem, MemoFace facing);
 }
 

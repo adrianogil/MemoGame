@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -37,15 +38,26 @@ public class ProceduralMemoGrid : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+        if (ProceduralMemoItem.itemActivate != null)
+        {
+            if (ProceduralMemoItem.itemActivate.IsGameEnded())
+            {
+                Invoke("GoToMenu", 5f);
+            }
+        }
 	}
+
+    public void GoToMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 
     public void Generate()
     {
         Vector3 gridPoint = Camera.main.transform.position +
             cameraDistance * Camera.main.transform.forward;
 
-        float scaledSize = 0.7f;
+        float scaledSize = 0.6f;
 
         float height = scaledSize * 2f * cameraDistance * Mathf.Tan(0.5f * Camera.main.fieldOfView * Mathf.Deg2Rad);
         float width = height * (Screen.width * 1f/ Screen.height);

@@ -4,7 +4,26 @@ public class MemoItemLogic : IMemoItemActivate
 {
     public const int MAX_ITEMS = 9;
 
+    private int mMatches = 0;
+    private bool mGameEnded = false;
+
     private List<ProceduralMemoItem> frontFacingItems = null;
+
+    private void OnItemMatched()
+    {
+        ScoreManager.Instance.AddToScore(100);
+        mMatches++;
+
+        if (mMatches >= (MAX_ITEMS / 2))
+        {
+            mGameEnded = true;
+        } 
+    }
+
+    public bool IsGameEnded()
+    {
+        return mGameEnded;
+    }
 
     public void Activate(ProceduralMemoItem memoItem, MemoFace facing)
     {
@@ -30,6 +49,8 @@ public class MemoItemLogic : IMemoItemActivate
             {
                 frontFacingItems.Remove(frontFacingItems[1]);
                 frontFacingItems.Remove(frontFacingItems[0]);
+
+                OnItemMatched();
             } else
             {
                 for (int i = frontFacingItems.Count-1; i >= 0; i--)
@@ -38,8 +59,6 @@ public class MemoItemLogic : IMemoItemActivate
                     frontFacingItems.Remove(frontFacingItems[i]);
                 }
             }
-
-
         }
     }
 
